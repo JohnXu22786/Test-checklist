@@ -2,32 +2,30 @@
 
 AI agent self-check checklist tool for writing tests. Ported from [opencode](https://github.com/anomalyco/opencode)'s `todowrite`.
 
-Agent 编写测试文件时的自我检查清单工具。
+## Features
 
-## Features / 特性
+- **In-memory storage** — no disk writes, data lives as long as the MCP server process (tied to opencode session)
+- **Multiple checklists** — create independent checklists per test area (widget / unit / navigation)
+- **Zero dependencies** — pure Node.js, just run it
 
-- **In-memory storage** — no disk writes, data lives as long as the MCP server process (tied to opencode session) / 纯内存存储，不写磁盘
-- **Multiple checklists** — create independent checklists per test area (widget / unit / navigation) / 支持多组独立清单
-- **Zero dependencies** — pure Node.js / 纯 Node.js，零依赖
+## 6 MCP Tools
 
-## 6 MCP Tools / 工具列表
+| Tool | Params | Returns | Purpose |
+|------|--------|---------|---------|
+| `test_checklist_init` | `name` + `items` | summary | Create/replace a named checklist |
+| `test_checklist_check` | `name` + `index` | summary | Mark an item as done |
+| `test_checklist_uncheck` | `name` + `index` | summary | Uncheck an item |
+| `test_checklist_mark_na` | `name` + `index` | summary | Mark an item N/A |
+| `test_checklist_status` | `name` | detailed markdown | View checklist progress |
+| `test_checklist_list` | none | list of all checklists | View all active checklists |
 
-| Tool / 工具 | Params / 参数 | Returns / 返回 | Purpose / 用途 |
-|-------------|---------------|----------------|----------------|
-| `test_checklist_init` | `name` + `items` | summary / 摘要 | Create/replace a named checklist / 创建或替换清单 |
-| `test_checklist_check` | `name` + `index` | summary / 摘要 | Check an item as done / 标记完成 |
-| `test_checklist_uncheck` | `name` + `index` | summary / 摘要 | Uncheck an item / 取消完成 |
-| `test_checklist_mark_na` | `name` + `index` | summary / 摘要 | Mark an item N/A / 标记不适用 |
-| `test_checklist_status` | `name` | detailed markdown / 详细进度 | View checklist progress / 查看清单进展 |
-| `test_checklist_list` | none / 无 | list of all checklists / 所有清单列表 | View all active checklists / 列出所有清单 |
+> All tools accept optional `name` parameter (default: `"default"`).
 
-> All tools accept optional `name` parameter (default: `"default"`). / 所有工具接受可选 `name` 参数，默认 `"default"`。
+## Usage
 
-## Usage / 使用方式
+### Register in opencode config
 
-### Register in opencode config / 注册到 opencode 配置
-
-Add to `~/.config/opencode/opencode.json`: / 添加到 `~/.config/opencode/opencode.json`：
+Add to `~/.config/opencode/opencode.json`:
 
 ```json
 {
@@ -41,7 +39,7 @@ Add to `~/.config/opencode/opencode.json`: / 添加到 `~/.config/opencode/openc
 }
 ```
 
-### ChecklistItem format / 数据格式
+### ChecklistItem format
 
 ```json
 {
@@ -52,40 +50,37 @@ Add to `~/.config/opencode/opencode.json`: / 添加到 `~/.config/opencode/openc
 }
 ```
 
-| Field / 字段 | Type / 类型 | Description / 说明 |
-|--------------|-------------|-------------------|
-| `content` | string | Check item description / 检查条目描述 |
-| `checked` | boolean | Done or not / 是否完成 |
-| `na` | boolean | Not applicable / 是否不适用 |
-| `category` | string? | Group name (optional) / 分类名（可选） |
+| Field | Type | Description |
+|-------|------|-------------|
+| `content` | string | Check item description |
+| `checked` | boolean | Done or not |
+| `na` | boolean | Not applicable |
+| `category` | string? | Group name (optional) |
 
-### Example workflow / 工作流示例
+### Example workflow
 
 ```
-# Agent 创建两个清单
+# Create two checklists
 test_checklist_init name="widget" items=[...]
 test_checklist_init name="unit" items=[...]
 
-# 完成一项
+# Check an item
 test_checklist_check name="widget" index=0
 
-# 标记不适用
+# Mark N/A
 test_checklist_mark_na name="unit" index=2
 
-# 查看进度
+# View progress
 test_checklist_status name="widget"
-# → Checklist [widget]: 3✓ 1— 2⬜ (6 total)
-# →   ...
+# -> Checklist [widget]: 3✓ 1— 2⬜ (6 total)
 
-# 查看所有清单
+# List all active checklists
 test_checklist_list
-# → Active checklists:
-# →   widget: 3✓ 1— 2⬜ (6)
-# →   unit: 4✓ 0— 3⬜ (7)
+# -> Active checklists:
+# ->   widget: 3✓ 1— 2⬜ (6)
+# ->   unit: 4✓ 0— 3⬜ (7)
 ```
 
-## Data lifecycle / 数据生命周期
+## Data lifecycle
 
-Data is stored **in memory only**. It is lost when the MCP server process exits (which happens when opencode closes). No files are written to disk.
-
-数据仅存储在内存中。opencode 关闭、MCP server 进程退出时数据即释放。**不会向磁盘写入任何文件。**
+Data is stored **in memory only**. It is lost when the MCP server process exits (when opencode closes). No files are written to disk.
