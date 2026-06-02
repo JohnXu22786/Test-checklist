@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const DIR = ".test_checklist";
-const baseDir = process.cwd();
+const baseDir = process.env.TEST_CHECKLIST_DATA_DIR || require("os").homedir();
 const dir = path.resolve(baseDir, DIR);
 if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
