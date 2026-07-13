@@ -84,3 +84,7 @@ test_checklist_list
 ## Data lifecycle
 
 Data is stored **in memory only**. It is lost when the MCP server process exits (when opencode closes). No files are written to disk.
+
+## Default template
+
+`test_checklist_init` ships with a lightweight 7-item behavior-focused template (returned in the tool description). It replaces the earlier mobile/UI-heavy 80-item template and is intended to scale across mobile, backend, and library work. For a one-shot trivial change, you may skip the checklist entirely; for critical work, load this template then add task-specific items.
