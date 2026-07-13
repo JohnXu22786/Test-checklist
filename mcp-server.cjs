@@ -22,93 +22,15 @@ function fullSummary(name, items) {
   return lines.join("\n");
 }
 
-const TPL = `The checklist should cover these categories (adapt as needed):
+const TPL = `The checklist should cover behavior-level testing (adapt as needed):
 
-### Widget - Basic Interaction
-- Every button / link / list item -> tap it -> verify expected outcome
-- Every input field -> valid data -> correct result; invalid data -> correct error
-- Initial render -> verify correct first-load state
-- Loading state -> indicator visible, element disabled during operation
-- Success state -> correct data displayed, correct state transition
-- Each failure type -> error visible, recovery path works, retry succeeds
-- Invalid input -> each condition independently, multiple simultaneously, error clears on correction
-- Empty state placeholder visible when no data
-- Overflow -> long content truncated or scrollable
-- Null / malformed / partial data -> widget handles without crash
-
-### Widget - Cleanup & Lifecycle
-- Timers, streams, listeners disposed when widget unmounts
-- Widget rebuilds during animation -> animation continues smoothly
-
-### Unit - Logic & Mocks
-- Every public method -> happy path + null/empty input + boundary values + each exception type
-- Mock call counts verified
-- Cache hit and cache miss both tested
-
-### Navigation & Page Transitions
-- A -> B -> back -> A: state, scroll position, form content preserved
-- Rapid A->B->A->B navigation: no crash, no stale state
-- Navigate during API call: no setState after dispose
-- Navigate with unsaved form data: appropriate handling
-
-### Concurrency & Rapid Triggers
-- Tap submit x2 rapidly -> only one operation fires
-- Tap button 10x during loading -> no duplicate operations
-- Operation fails -> immediately retry -> retry succeeds
-
-### Data & Side Effects
-- Delete item -> gone from ALL views
-- Create item -> appears in all relevant lists
-- Toggle on/off -> all dependent UI appears/hides correctly
-- Update item -> all cached/displayed copies reflect the update
-
-### Input Stress
-- Paste long text (1000+ chars) -> correct truncation or validation error
-- Special characters, Unicode, emoji -> display and submit correctly
-- Submit empty form -> all validation errors shown simultaneously
-- Partially valid form -> valid fields keep values, only invalid fields show errors
-
-### Layout & Reflow
-- Content appears -> existing elements shift, nothing covered/clipped
-- Content disappears -> remaining elements reflow, no empty gaps
-- Keyboard opens -> input fields remain visible
-
-### Modal / Dialog / Overlay
-- Open modal -> underlying content not interactive
-- Tap overlay background -> modal dismisses or stays, no partial state
-- Stacked modals -> dismiss top -> bottom still works
-
-### List & Scroll
-- Load more (pagination) -> scroll to bottom -> load more -> no duplicates, no gaps
-- Delete item from scrolled list -> remaining items re-index correctly
-
-### Chaos Operations
-- Rapid toggle switch 20x -> final state matches last toggle action
-- Open/close dialog 10x rapidly -> no memory leak
-- Disabled button tapped 10x -> nothing happens
-
-### App Lifecycle & Interruptions
-- App background -> foreground mid-operation -> state preserved
-- Rapid background/foreground cycling (5x) -> no memory growth
-
-### Timer & Async Safety
-- Timer fires after widget disposed -> no crash
-- Debounced search: type fast -> only final value fires
-- Polling stops or continues by design after navigation
-
-### Network Edge Cases
-- Malformed JSON -> graceful error
-- Unexpected HTTP status (502/301/429/500) -> appropriate error per status
-- Connection drops mid-response -> partial data handled or discarded
-
-### Accessibility
-- Every interactive element has a semantic label
-- Touch targets >= 48x48 logical pixels
-- Screen reader focus follows logical order
-
-### Coverage & Integrity
-- Branch tree mapped for each async/interactive operation before writing tests
-- No assertions weakened, no tests deleted or commented out to pass`
+- Cover empty / null / missing input with explicit assertions
+- Cover error paths (not just the happy path)
+- Cover boundary values (min, max, just-over-limit)
+- Cover async / concurrent scenarios (race, rapid triggers, cancellation)
+- Verify resource cleanup (timers, listeners, streams, handles)
+- Each test states the behavior it protects in one sentence
+- Reconcile line coverage with enumerated behaviors; explain any gap`
 
 const TOOLS = [
   {
