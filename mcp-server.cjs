@@ -30,7 +30,8 @@ const TPL = `The checklist should cover behavior-level testing (adapt as needed)
 - Cover async / concurrent scenarios (race, rapid triggers, cancellation)
 - Verify resource cleanup (timers, listeners, streams, handles)
 - Each test states the behavior it protects in one sentence
-- Reconcile line coverage with enumerated behaviors; explain any gap`
+- Reconcile line coverage with enumerated behaviors; explain any gap
+- Run project code format check (formatter / linter) before submitting`
 
 const TOOLS = [
   {
