@@ -22,15 +22,14 @@ function fullSummary(name, items) {
   return lines.join("\n");
 }
 
-const TPL = `The checklist should cover behavior-level testing (adapt as needed):
+const TPL = `The checklist tracks the tests you actually decided to write — one item per
+test, each stating the regression it prevents in one sentence:
 
-- Cover empty / null / missing input with explicit assertions
-- Cover error paths (not just the happy path)
-- Cover boundary values (min, max, just-over-limit)
-- Cover async / concurrent scenarios (race, rapid triggers, cancellation)
-- Verify resource cleanup (timers, listeners, streams, handles)
-- Each test states the behavior it protects in one sentence
-- Reconcile line coverage with enumerated behaviors; explain any gap`
+- List only planned tests, one item per test
+- Behaviors you chose not to test (trivial) are not listed, or marked N/A
+- Skipping a test is the default, not a gap to fill; never invent a test to
+  fill a checklist item
+- Before reporting done, all items must be [x] or [-]`
 
 const TOOLS = [
   {

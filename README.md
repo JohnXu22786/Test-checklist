@@ -87,4 +87,4 @@ Data is stored **in memory only**. It is lost when the MCP server process exits 
 
 ## Default template
 
-`test_checklist_init` ships with a lightweight 7-item behavior-focused template (returned in the tool description). It replaces the earlier mobile/UI-heavy 80-item template and is intended to scale across mobile, backend, and library work. For a one-shot trivial change, you may skip the checklist entirely; for critical work, load this template then add task-specific items.
+`test_checklist_init` returns a short template describing how to build a checklist. The checklist is the agent's own test list — one item per planned test, stating the regression it prevents — not a category list to fill. Trivial behaviors (pure state wiring, display, delegation) are not listed or are marked N/A; skipping a test is the default, not a gap. Never invent a test to fill a checklist item.
